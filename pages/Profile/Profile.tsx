@@ -4,6 +4,6 @@ import styles from './styles'
 
 export default () =>
 
-<View style={styles.container()}>
+<View style={styles.container}>
 Profile
 </View>

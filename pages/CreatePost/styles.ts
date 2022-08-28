@@ -1,9 +1,9 @@
-import { StyleProp, ViewStyle } from 'react-native'
+import { View } from "../../types"
 
 export default {
-    container(): StyleProp<ViewStyle> {
-        return {
-            flex: 1
-        }
+    container: {
+        flex: 1,
     }
+} as {
+    container: View
 }
