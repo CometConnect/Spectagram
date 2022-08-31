@@ -4,3 +4,6 @@ export type View = StyleProp<ViewStyle>
 export type Text = StyleProp<TextStyle>
 export type Image = StyleProp<ImageStyle>
 export const rem = 16
+
+export type Props = {}
+export type State = {}
