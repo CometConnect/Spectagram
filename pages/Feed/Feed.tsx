@@ -3,8 +3,9 @@ import { FlatList, Image, SafeAreaView, Text, View } from 'react-native'
 import styles from './styles'
 import post from '../../temp_posts'
 import PostCard from '../../components/PostCard'
+import { Props } from '../../types'
 
-export default () =>
+export default ({ navigation }: Props) =>
 
 <View style={styles.container}>
     <SafeAreaView style={styles.droidSafeArea} />
@@ -23,7 +24,7 @@ export default () =>
         <FlatList
             keyExtractor={(_, i)=> i.toString()}
             data={post}
-            renderItem={PostCard}
+            renderItem={({ item })=> <PostCard item={item} navigation={navigation} />}
         />
     </View>
 </View>
