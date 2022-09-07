@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Image, SafeAreaView, View, Text, TextInput, TouchableOpacity } from 'react-native'
+import { getDoc, doc, getFirestore, setDoc } from 'firebase/firestore'
+import { getAuth } from 'firebase/auth'
 import { RFValue } from 'react-native-responsive-fontsize'
 import DropDownPicker from 'react-native-dropdown-picker'
 import style from './styles'
@@ -14,7 +16,17 @@ export default () => {
     let styles = new style(theme)
     useEffect(()=> {
         styles = new style(theme)
+        setDoc(doc(getFirestore(), "users", getAuth().currentUser!.uid), { theme })
     }, [theme])
+    async function getTheme(): Promise<Theme> {
+        const docSnap = await getDoc(doc(getFirestore(), "users", getAuth().currentUser!.uid))
+        if (!docSnap.exists()) return 'light' // default
+        return docSnap.data().theme as Theme
+    }
+
+    useEffect(()=> {
+        getTheme().then(res=> setTheme(res))
+    }, [])
 
     return (
 <View style={styles.container}>
