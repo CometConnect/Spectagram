@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Image, View, Text, TouchableOpacity } from 'react-native'
 import { RFValue } from 'react-native-responsive-fontsize'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { Post } from '../../temp_posts'
-import { nav } from '../../types'
-import styles from './styles'
+import { nav, Theme } from '../../types'
+import style from './styles'
 
-export default ({ item: { author, caption, image }, navigation: { navigate } }: { item: Post, navigation: nav }) => 
-
+export default ({ item: { author, caption, image }, navigation: { navigate }, theme }: { item: Post, navigation: nav, theme: Theme }) => {
+    const styles = new style(theme)
+    return (
 <View style={styles.container}>
     <TouchableOpacity
         style={styles.cardContainer}
@@ -29,3 +30,5 @@ export default ({ item: { author, caption, image }, navigation: { navigate } }: 
         </View>
     </TouchableOpacity>
 </View>
+    )
+}

@@ -1,17 +1,26 @@
-import React, { useState } from 'react'
-import { Image, SafeAreaView, View, Text, ScrollView, TextInput } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Image, SafeAreaView, View, Text, TextInput, TouchableOpacity } from 'react-native'
 import { RFValue } from 'react-native-responsive-fontsize'
 import DropDownPicker from 'react-native-dropdown-picker'
-import styles from './styles'
+import style from './styles'
+import { Theme } from '../../types'
 
 export default () => {
     const [caption, setCaption] = useState('')
     const [dropDownHeight, setDropDownHeight] = useState(0)
     const [open, setOpen] = useState(false)
     const [previewImage, setPreviewImage] = useState('image_1')
+    const [theme, setTheme] = useState<Theme>('light')
+    let styles = new style(theme)
+    useEffect(()=> {
+        styles = new style(theme)
+    }, [theme])
 
     return (
 <View style={styles.container}>
+    <TouchableOpacity onPress={()=> setTheme(theme === 'light' ? 'dark' : 'light')} style={styles.theme}>
+        Change Theme
+    </TouchableOpacity>
     <SafeAreaView style={styles.droidSafeArea} />
     <View style={styles.appTitle}>
         <View style={styles.appIcon}>
@@ -52,7 +61,7 @@ export default () => {
                 textAlign="center"
                 onChangeText={text=> setCaption(text)}
                 placeholder="Caption"
-                placeholderTextColor="white"
+                placeholderTextColor={theme === 'light' ? 'black' : 'white'}
             />
         {/* </ScrollView> */}
     </View>
