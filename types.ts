@@ -17,5 +17,25 @@ export interface nav {
         name:   string
         params: Post
     },
+    addListener(type: any, callback: any): void
+    canGoBack(): void
+    closeDrawer(): void
+    dispatch(thunk: any): void
+    getId(): void
+    getParent(id: any): void
+    getState(): void
+    goBack(): void
+    isFocused(): void
+    jumpTo(): void
     navigate(route: string, params: Object): void
+    openDrawer(): void
+    pop(): void
+    popToTop(): void
+    push(): void
+    removeListener(type: any, callback: any): void
+    replace(): void
+    reset(): void
+    setOptions(options: any): void
+    setParams(): void
+    toggleDrawer(): void
 }

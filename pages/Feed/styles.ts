@@ -1,11 +1,12 @@
 import { Platform, StatusBar } from 'react-native'
 import { RFValue } from 'react-native-responsive-fontsize'
-import { Image, Text, View } from '../../types'
+import { Image, rem, Text, View } from '../../types'
 
 export default {
     container: {
         flex: 1,
         backgroundColor: '#303030',
+        alignItems: 'center',
     },
     droidSafeArea: {
         marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : RFValue(35),
@@ -13,6 +14,7 @@ export default {
     appTitle: {
         flex: 0.07,
         flexDirection: 'row',
+        width: '40%',
     },
     appIcon: {
         flex: 0.2,
@@ -34,7 +36,13 @@ export default {
     },
     cardContainer: {
         flex: 0.85,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
+    flatlist: {
+        marginTop: 2*rem,
+        width: '100%',
+    }
 } as {
     container: View
     droidSafeArea: View
@@ -44,4 +52,5 @@ export default {
     appTitleTextContainer: View
     appTitleText: Text
     cardContainer: View
+    flatlist: View
 }

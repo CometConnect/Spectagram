@@ -22,6 +22,7 @@ export default ({ navigation }: Props) =>
     </View>
     <View style={styles.cardContainer}>
         <FlatList
+            style={styles.flatlist}
             keyExtractor={(_, i)=> i.toString()}
             data={post}
             renderItem={({ item })=> <PostCard item={item} navigation={navigation} />}
