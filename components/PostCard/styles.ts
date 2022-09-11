@@ -20,10 +20,7 @@ export default class style {
             backgroundColor: theme === 'light' ? '#8c8c8c' : '#151515',
             borderRadius: 2 * rem,
             padding: '1rem',
-            width: '90%',
             flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
         }
         this.cardContainer = {}
         this.authorContainer = {
