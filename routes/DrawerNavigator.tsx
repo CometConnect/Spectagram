@@ -22,7 +22,7 @@ export default () => {
         ? <Drawer.Screen name="Logout" component={Logout} />
         : <Drawer.Screen name="Login" component={Login} />
     }
-    <Drawer.Screen name="Home" component={StackNavigator} />
+    { user ? <Drawer.Screen name="Home" component={StackNavigator} /> : null }
     { user ? <Drawer.Screen name="Profile" component={Profile} /> : null }
 </Drawer.Navigator>
     )

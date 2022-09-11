@@ -1,11 +1,21 @@
-import { ImageStyle, StyleProp, TextStyle, ViewStyle } from "react-native";
-import { Post } from "./temp_posts";
+import { ImageStyle, StyleProp, TextStyle, ViewStyle } from 'react-native'
 
 export type View = StyleProp<ViewStyle>
 export type Text = StyleProp<TextStyle>
 export type Image = StyleProp<ImageStyle>
 export const rem = 16
 export type Theme = 'light' | 'dark'
+export type PostSnippet = {
+    caption: string
+    previewImage: string
+    author: string
+    created_on: Date
+    authorUid: string
+    likes: number
+}
+export interface Post extends PostSnippet {
+    id: string
+}
 
 export interface Props {
     navigation: nav

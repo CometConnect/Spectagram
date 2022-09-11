@@ -53,7 +53,6 @@ export default class style {
         }
         this.flatlist = {
             marginTop: 2*rem,
-            width: '100%',
         }
         this.theme = {
             position: 'absolute',

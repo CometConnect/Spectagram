@@ -1,32 +1,44 @@
 import React, { useEffect, useState } from 'react'
 import { FlatList, Image, SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
-import { getDoc, doc, getFirestore, setDoc } from 'firebase/firestore'
+import { getDoc, doc, getFirestore, setDoc, getDocs, query, collection } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
-import post from '../../temp_posts'
 import PostCard from '../../components/PostCard'
-import { Props, Theme } from '../../types'
+import { Post, PostSnippet, Props, Theme } from '../../types'
 import style from './styles'
 
 export default ({ navigation }: Props) => {
     const [theme, setTheme] = useState<Theme>('light')
+    const [posts, setPosts] = useState<Post[]>([])
     let styles = new style(theme)
+
     useEffect(()=> {
         styles = new style(theme)
         setDoc(doc(getFirestore(), "users", getAuth().currentUser!.uid), { theme })
     }, [theme])
 
-    async function getTheme(): Promise<Theme> {
-        const docSnap = await getDoc(doc(getFirestore(), "users", getAuth().currentUser!.uid))
-        if (!docSnap.exists()) return 'light' // default
-        return docSnap.data().theme as Theme
-    }
-
     useEffect(()=> {
-        getTheme().then(res=> setTheme(res))
+        // get Theme
+        getDoc(doc(getFirestore(), "users", getAuth().currentUser!.uid))
+        .then(docSnap=> {
+            if (!docSnap.exists()) return 'light' // default
+            setTheme(docSnap.data().theme as Theme)
+        })
+
+        // fetch Posts
+        const copy = [...posts]
+        getDocs(query(collection(getFirestore(), "posts")))
+        .then(dbPosts=> {
+            dbPosts.forEach(doc=> {
+                const data = doc.data() as PostSnippet
+                copy.push({ id: doc.id, ...data })
+            })
+        })
+        setPosts(copy)
     }, [])
+
     return (
 <View style={styles.container}>
-<TouchableOpacity onPress={()=> setTheme(theme === 'light' ? 'dark' : 'light')} style={styles.theme}>
+    <TouchableOpacity onPress={()=> setTheme(theme === 'light' ? 'dark' : 'light')} style={styles.theme}>
         Change Theme
     </TouchableOpacity>
     <SafeAreaView style={styles.droidSafeArea} />
@@ -44,8 +56,8 @@ export default ({ navigation }: Props) => {
     <View style={styles.cardContainer}>
         <FlatList
             style={styles.flatlist}
-            keyExtractor={(_, i)=> i.toString()}
-            data={post}
+            keyExtractor={post=> post.id}
+            data={posts}
             renderItem={({ item })=> <PostCard item={item} navigation={navigation} theme={theme} />}
         />
     </View>

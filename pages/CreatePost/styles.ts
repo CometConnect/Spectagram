@@ -19,6 +19,7 @@ export default class style {
     dropDownAcrossStyle: Text
     inputFont: View | Text
     positionFixer: View
+    submit: View
     theme: View
 
     constructor(theme: Theme) {
@@ -100,6 +101,14 @@ export default class style {
         }
         this.positionFixer = {
             marginTop: 15 * rem
+        }
+        this.submit = {
+            paddingLeft: 2 * rem,
+            paddingRight: 2 * rem,
+            paddingTop: 0.5 * rem,
+            paddingBottom: 0.5 * rem,
+            borderRadius: 1 * rem,
+            borderWidth: 0
         }
         this.theme = {
             position: 'absolute',
