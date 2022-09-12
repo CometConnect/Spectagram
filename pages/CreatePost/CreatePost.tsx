@@ -6,6 +6,7 @@ import { RFValue } from 'react-native-responsive-fontsize'
 import DropDownPicker from 'react-native-dropdown-picker'
 import style from './styles'
 import { Post, Props, Theme } from '../../types'
+import { getTheme } from '../../utils'
 
 type Prop = Props & Post
 const CreatePost: FC<Prop> = ({ navigation }) => {
@@ -15,46 +16,41 @@ const CreatePost: FC<Prop> = ({ navigation }) => {
     const [previewImage, setPreviewImage] = useState('image_1')
     const [theme, setTheme] = useState<Theme>('light')
     let styles = new style(theme)
+
+    useEffect(()=> {
+        getTheme(getAuth().currentUser, setTheme)
+    }, [])
     useEffect(()=> {
         styles = new style(theme)
-        setDoc(doc(getFirestore(), "users", getAuth().currentUser!.uid), { theme })
     }, [theme])
-    async function getTheme(): Promise<Theme> {
-        const docSnap = await getDoc(doc(getFirestore(), "users", getAuth().currentUser!.uid))
-        if (!docSnap.exists()) return 'light' // default
-        return docSnap.data().theme as Theme
-    }
 
     function generateID(passwordLength: number) {
-        var numberChars = "0123456789"
-        var upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        var lowerChars = "abcdefghijklmnopqrstuvwxyz"
-        var allChars = numberChars + upperChars + lowerChars
-        var randPasswordArray = Array(passwordLength)
+        const numberChars = "0123456789"
+        const upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        const lowerChars = "abcdefghijklmnopqrstuvwxyz"
+        const allChars = numberChars + upperChars + lowerChars
+        let randPasswordArray = Array(passwordLength)
         randPasswordArray[0] = numberChars
         randPasswordArray[1] = upperChars
         randPasswordArray[2] = lowerChars
         randPasswordArray = randPasswordArray.fill(allChars, 3)
-        return shuffleArray(randPasswordArray.map(x => x[Math.floor(Math.random() * x.length)] )).join('')
-    }
-    
-    function shuffleArray(array: any[]) {
-      for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1))
-        var temp = array[i]
-        array[i] = array[j]
-        array[j] = temp
-      }
-      return array
-    }
 
-    useEffect(()=> {
-        getTheme().then(res=> setTheme(res))
-    }, [])
+        const shuffledArray = randPasswordArray.map(x => x[Math.floor(Math.random() * x.length)])
+        for (var i = shuffledArray.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1))
+            var temp = shuffledArray[i]
+            shuffledArray[i] = shuffledArray[j]
+            shuffledArray[j] = temp
+        }
+        return shuffledArray.join('')
+    }
 
     return (
 <View style={styles.container}>
-    <TouchableOpacity onPress={()=> setTheme(theme === 'light' ? 'dark' : 'light')} style={styles.theme}>
+    <TouchableOpacity onPress={()=> {
+        setDoc(doc(getFirestore(), "users", getAuth().currentUser!.uid), { theme: theme === 'light' ? 'dark': 'light' })
+        setTheme(theme === 'light' ? 'dark' : 'light')
+    }} style={styles.theme}>
         Change Theme
     </TouchableOpacity>
     <SafeAreaView style={styles.droidSafeArea} />

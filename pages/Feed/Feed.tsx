@@ -5,6 +5,7 @@ import { getAuth } from 'firebase/auth'
 import PostCard from '../../components/PostCard'
 import { Post, PostSnippet, Props, Theme } from '../../types'
 import style from './styles'
+import { getTheme } from '../../utils'
 
 export default ({ navigation }: Props) => {
     const [theme, setTheme] = useState<Theme>('light')
@@ -13,16 +14,10 @@ export default ({ navigation }: Props) => {
 
     useEffect(()=> {
         styles = new style(theme)
-        setDoc(doc(getFirestore(), "users", getAuth().currentUser!.uid), { theme })
     }, [theme])
 
     useEffect(()=> {
-        // get Theme
-        getDoc(doc(getFirestore(), "users", getAuth().currentUser!.uid))
-        .then(docSnap=> {
-            if (!docSnap.exists()) return 'light' // default
-            setTheme(docSnap.data().theme as Theme)
-        })
+        getTheme(getAuth().currentUser, setTheme)
 
         // fetch Posts
         const copy = [...posts]
@@ -33,12 +28,17 @@ export default ({ navigation }: Props) => {
                 copy.push({ id: doc.id, ...data })
             })
         })
-        setPosts(copy)
+        .finally(()=> {
+            setPosts(copy)
+        })
     }, [])
 
     return (
 <View style={styles.container}>
-    <TouchableOpacity onPress={()=> setTheme(theme === 'light' ? 'dark' : 'light')} style={styles.theme}>
+    <TouchableOpacity onPress={()=> {
+        setDoc(doc(getFirestore(), "users", getAuth().currentUser!.uid), { theme: theme === 'light' ? 'dark': 'light' })
+        setTheme(theme === 'light' ? 'dark' : 'light')
+    }} style={styles.theme}>
         Change Theme
     </TouchableOpacity>
     <SafeAreaView style={styles.droidSafeArea} />
